@@ -34,8 +34,8 @@ X_test, y_test, _, _ = process_data(test, categorical_features=cat_features,
 rfc =  model.train_model(X_train, y_train)
 print(rfc)
 
-with open("starter/model/rf.pkl", "wb") as f:
-    pickle.dump(rfc, f)
+model.save_model("starter/model/rf.pkl", rfc)
+
 
 
 
