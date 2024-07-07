@@ -37,6 +37,7 @@ rfc =  model.train_model(X_train, y_train)
 print(rfc)
 
 model.save_model("starter/model/rf.pkl", rfc)
+model.save_model("starter/model/encoder.pkl", encoder)
 
 
 
