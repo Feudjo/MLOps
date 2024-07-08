@@ -29,12 +29,14 @@ X_train, y_train, encoder, lb = process_data(
 X_test, y_test, _, _ = process_data(test, categorical_features=cat_features,
                                     training=False,
                                     encoder=encoder,
-                                    lb=lb)
+                                    lb=lb,
+                                    label="salary")
+
+
 
 # Train and save a model.
 
 rfc =  model.train_model(X_train, y_train)
-print(rfc)
 
 model.save_model("starter/model/rf.pkl", rfc)
 model.save_model("starter/model/encoder.pkl", encoder)

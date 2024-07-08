@@ -5,6 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 from typing import Iterable
 import pickle
+from ml.data import process_data
 
 def train_model(X_train, y_train):
     """
@@ -107,22 +108,53 @@ def load_model(file: str):
 
 
 
-def slice_gender(df:pd.DataFrame, y:np.array, preds:np.array) -> Iterable:
-    """Computes f1 score for each gender category
+def compute_slice(model, df:pd.DataFrame,
+                  feature: str,
+                  encoder,
+                  lb) -> Iterable:
+    """Computes metrics  for each gender category
 
     Args:
-        df (pd.DataFrame): input dataframe
-        y (_type_): trained model
-        preds ()
+        model: Trained model
+        y (np.array): true target
+        preds (np.array): Predicted value
+        feature (str): Categorical feature to slice the data on.
+        encoder: Categorical features encoder
+        lb:  label binarizer
     Returns:
         fbeta_score: Dict
             Dictionary where keys references a gender and values,
             the fbeta scores
     """
-    f1_dict = dict()
-    for gender in df["sex"].unique():
-        df_temp = df[df["sex"]==gender]
-        f1 = compute_model_metrics(y, preds)
-        f1_dict[gender]=f1
-    return f1_dict
+    cat_features = [
+    "workclass",
+    "education",
+    "marital-status",
+    "occupation",
+    "relationship",
+    "race",
+    "sex",
+    "native-country",
+]
+    #cat_features.remove(feature)
+    X_test, y_test, _, _ = process_data(df, categorical_features=cat_features,
+                                    training=False,
+                                    encoder=encoder,
+                                    lb=lb,
+                                    label="salary")
+    unique_values = df[feature].unique()
+
+    slice_metric = dict()
+    for value in unique_values:
+        mask = df[feature]==value
+        x_slice, y_slice = X_test[mask], y_test[mask]
+
+        y_pred = inference(model, x_slice)
+        precision, recall, f1_score = compute_model_metrics(y_slice, y_pred)
+
+
+        slice_metric[value] = {"precision":precision,
+                               "recall": recall,
+                               "f1_score": f1_score}
+    return slice_metric
 
