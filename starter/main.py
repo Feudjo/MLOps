@@ -15,6 +15,10 @@ class CensusDataRecord(BaseModel):
     relationship: str
     race: str
     sex: str
+    capital_gain:int
+    capital_loss: int
+    hours_per_week: int
+    native_country: str
 
 
 
