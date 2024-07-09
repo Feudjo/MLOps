@@ -2,9 +2,12 @@ import pandas as pd
 import pytest
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from starter.ml.data import process_data
+from ml import model
+from ml.data import process_data
 
-from starter.ml import model
+@pytest.fixture
+def load_data():
+    return pd.read_csv("starter/data/census.csv")
 
 def test_load_model():
     """Import data"""
@@ -13,9 +16,8 @@ def test_load_model():
 
 
 
-def test_train_model():
-    data = pd.read_csv("starter/data/census.csv")
-    data = data.copy()[:20]
+def test_train_model(load_data):
+    data = load_data.copy()[:20]
     # Optional enhancement, use K-fold cross validation instead of a train-test split.
 
     cat_features = [
@@ -37,3 +39,29 @@ def test_train_model():
 
     rfc =  model.train_model(X_train, y_train)
     assert isinstance(type(rfc), type(RandomForestClassifier))
+
+
+def test_compute_slice(load_data):
+    data = load_data.copy()[:20]
+    # Optional enhancement, use K-fold cross validation instead of a train-test split.
+
+    cat_features = [
+        "workclass",
+        "education",
+        "marital-status",
+        "occupation",
+        "relationship",
+        "race",
+        "sex",
+        "native-country",
+    ]
+    X_train, y_train, encoder, lb = process_data(
+        data, categorical_features=cat_features, label="salary", training=True
+    )
+
+
+    # Train and save a model.
+
+    rfc =  model.train_model(X_train, y_train)
+    r = model.compute_slice(rfc, data, "sex", encoder, lb)
+    assert set(r.keys())== set(("Male", "Female"))

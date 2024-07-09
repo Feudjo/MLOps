@@ -3,7 +3,7 @@ from sklearn.model_selection import GridSearchCV
 import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
-from typing import Iterable
+from typing import  Dict
 import pickle
 from ml.data import process_data
 
@@ -111,7 +111,7 @@ def load_model(file: str):
 def compute_slice(model, df:pd.DataFrame,
                   feature: str,
                   encoder,
-                  lb) -> Iterable:
+                  lb) -> Dict:
     """Computes metrics  for each gender category
 
     Args:
@@ -157,4 +157,6 @@ def compute_slice(model, df:pd.DataFrame,
                                "recall": recall,
                                "f1_score": f1_score}
     return slice_metric
+
+
 
