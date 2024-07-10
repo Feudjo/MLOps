@@ -1,5 +1,12 @@
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse
+from starter.ml.data import process_data
+from starter.ml import model
+import pandas as pd
+from fastapi.responses import JSONResponse
+import numpy as np
+import json
+
 
 from pydantic import BaseModel
 
@@ -41,4 +48,29 @@ async def read_root():
 
 @app.post("/record")
 async def predict_income(item: CensusDataRecord):
-    pass
+    df = pd.DataFrame([item.dict()])
+    df.rename(columns={"marital_status":"marital-status",
+                       "native_country":"native-country"},
+              inplace=True)
+    encoder = model.load_model("model/encoder.pkl")
+    rf = model.load_model("model/rf.pkl")
+
+    cat_features = [
+    "workclass",
+    "education",
+    "marital-status",
+    "occupation",
+    "relationship",
+    "race",
+    "sex",
+    "native-country",
+]
+    X,_,_,_= process_data(df,training=False,
+                             encoder=encoder,
+                             categorical_features=cat_features)
+
+    result = rf.predict(X)
+    interpretation  = np.where(result==0, "Salary does not exceed 50k",
+                               "Salary exceeds 50k")
+    interpretationlist = interpretation.tolist()
+    return json.dumps({"Prediction": interpretationlist})
