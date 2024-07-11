@@ -1,10 +1,12 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Body
 from fastapi.responses import HTMLResponse
 from starter.ml.data import process_data
 from starter.ml import model
 import pandas as pd
 from fastapi.responses import JSONResponse
 import numpy as np
+from typing import Annotated
+
 import json
 
 
@@ -28,7 +30,6 @@ class CensusDataRecord(BaseModel):
     native_country: str
 
 
-
 app  = FastAPI()
 
 @app.get("/")
@@ -47,7 +48,27 @@ async def read_root():
     return HTMLResponse(content=html_content)
 
 @app.post("/record")
-async def predict_income(item: CensusDataRecord):
+async def predict_income(item: Annotated[CensusDataRecord,
+                                         Body(
+                                             examples=[
+                                                {
+                                                    "age": 39,
+                                                    "workclass": "State-gov",
+                                                    "fnlwgt": 77516,
+                                                    "education": "Bachelors",
+                                                    "education_num": 13,
+                                                    "marital_status": "Never-married",
+                                                    "occupation": "dm-clerica",
+                                                    "relationship": "Not-in-family",
+                                                    "race": "White",
+                                                    "sex": "Male",
+                                                    "capital_gain": 2174,
+                                                    "capital_loss": 0,
+                                                    "hours_per_week": 40,
+                                                    "native_country": "United-States"
+                                                }
+                                             ]
+                                         )]):
     df = pd.DataFrame([item.dict()])
     df.rename(columns={"marital_status":"marital-status",
                        "native_country":"native-country"},
