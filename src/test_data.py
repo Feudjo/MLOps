@@ -2,16 +2,16 @@ import pandas as pd
 import pytest
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
-from ml import model
-from ml.data import process_data
+from src.ml import model
+from src.ml.data import process_data
 
 @pytest.fixture
 def load_data():
-    return pd.read_csv("starter/data/census.csv")
+    return pd.read_csv("data/census.csv")
 
 def test_load_model():
     """Import data"""
-    mdl = model.load_model("starter/model/rf.pkl")
+    mdl = model.load_model("model/rf.pkl")
     assert isinstance(type(mdl), type(RandomForestClassifier))
 
 

@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 from typing import  Dict
 import pickle
-from starter.ml.data import process_data
+from src.ml.data import process_data
 
 def train_model(X_train, y_train):
     """

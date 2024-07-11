@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Body
 from fastapi.responses import HTMLResponse
-from starter.ml.data import process_data
-from starter.ml import model
+from src.ml.data import process_data
+from src.ml import model
 import pandas as pd
 from fastapi.responses import JSONResponse
 import numpy as np

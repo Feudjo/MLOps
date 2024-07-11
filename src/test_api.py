@@ -15,7 +15,6 @@ def test_missing_fields():
         "age": 39,
         "workclass": "State-gov",
         "fnlwgt": 77516,
-        # "education": "Bachelors",
         "education_num": 13,
         "marital_status": "Never-married",
         "occupation": "Adm-clerical",
@@ -50,4 +49,4 @@ def test_invalid_datatype():
             "native_country": "United-States"
         }
     )
-    assert response.status_code == 422  # Unprocessable Entity
+    assert response.status_code == 422
