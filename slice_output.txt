@@ -1,2 +1,2 @@
-Female: {'precision': 0.9081632653061225, 'recall': 0.7007874015748031, 'f1_score': 0.791111111111111}
-Male: {'precision': 0.8797678275290216, 'recall': 0.7818717759764185, 'f1_score': 0.8279360124853686}
+Male: {'precision': 1.0, 'recall': 0.6, 'f1_score': 0.7499999999999999}
+Female: {'precision': 1.0, 'recall': 0.0, 'f1_score': 0.0}
