@@ -1,12 +1,11 @@
 # Script to train machine learning model.
 
-import pickle
 from sklearn.model_selection import train_test_split
 import pandas as pd
 from ml.data import process_data
 from ml import model
 # Add code to load in the data.
-data = pd.read_csv("starter/data/census.csv")
+data = pd.read_csv("data/census.csv")
 
 
 # Optional enhancement, use K-fold cross validation instead of a train-test split.
@@ -40,6 +39,8 @@ rfc =  model.train_model(X_train, y_train)
 
 model.save_model("starter/model/rf.pkl", rfc)
 model.save_model("starter/model/encoder.pkl", encoder)
+
+model.compute_slice(rfc, test, "sex", encoder, lb)
 
 
 

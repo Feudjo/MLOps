@@ -5,7 +5,7 @@ from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 from typing import  Dict
 import pickle
-from src.ml.data import process_data
+from ml.data import process_data
 
 def train_model(X_train, y_train):
     """
@@ -156,7 +156,19 @@ def compute_slice(model, df:pd.DataFrame,
         slice_metric[value] = {"precision":precision,
                                "recall": recall,
                                "f1_score": f1_score}
+
+        write_dict_to_file(slice_metric, "slice_output.txt")
     return slice_metric
 
 
 
+def write_dict_to_file(data_dict: dict, filename:str):
+    """Writes the contents of a dictionary to a text file.
+
+    Args:
+        data_dict (dict): Dictionary to write in file.
+        filename (str): Name of the file to write to.
+    """
+    with open(filename, "w") as f:
+        for k, v in data_dict.items():
+            f.write(f'{k}: {v}\n')
